@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUser = async () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
     try {
       const response = await axios.get(`${apiUrl}/api/auth/me`, { withCredentials: true });
       setUser(response.data);
