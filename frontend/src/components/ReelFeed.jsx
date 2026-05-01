@@ -5,7 +5,25 @@ import '../styles/reels.css';
 const ReelFeed = ({ items, onLike, onSave, onComment, emptyMessage = "No videos available." }) => {
     const [activeCommentId, setActiveCommentId] = useState(null);
     const [commentText, setCommentText] = useState("");
+    const [displayItems, setDisplayItems] = useState([]);
     const videoRefs = useRef({});
+    const feedRef = useRef(null);
+
+    // Initialize and sync displayItems with items prop
+    useEffect(() => {
+        if (items && items.length > 0) {
+            // Start with a few copies to ensure scrollability if items are few
+            setDisplayItems([...items, ...items]);
+        }
+    }, [items]);
+
+    const handleScroll = (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+        // If we are near the bottom, append another copy of items
+        if (scrollTop + clientHeight >= scrollHeight - 100) {
+            setDisplayItems(prev => [...prev, ...items]);
+        }
+    };
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -16,7 +34,6 @@ const ReelFeed = ({ items, onLike, onSave, onComment, emptyMessage = "No videos 
                         video.play().catch(() => {});
                     } else {
                         video.pause();
-                        video.currentTime = 0;
                     }
                 });
             },
@@ -33,7 +50,7 @@ const ReelFeed = ({ items, onLike, onSave, onComment, emptyMessage = "No videos 
                 if (video) observer.unobserve(video);
             });
         };
-    }, [items]);
+    }, [displayItems]);
 
     const handleCommentSubmit = (e, foodId) => {
         e.preventDefault();
@@ -49,11 +66,11 @@ const ReelFeed = ({ items, onLike, onSave, onComment, emptyMessage = "No videos 
 
     return (
         <div className="reels-page">
-            <div className="reels-feed">
-                {items.map((item) => (
-                    <div key={item._id} className="reel" id={`reel-${item._id}`}>
+            <div className="reels-feed" ref={feedRef} onScroll={handleScroll}>
+                {displayItems.map((item, index) => (
+                    <div key={`${item._id}-${index}`} className="reel" id={`reel-${item._id}-${index}`}>
                         <video
-                            ref={(el) => (videoRefs.current[item._id] = el)}
+                            ref={(el) => (videoRefs.current[`${item._id}-${index}`] = el)}
                             src={item.video}
                             className="reel-video"
                             loop
