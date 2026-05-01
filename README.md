@@ -1,3 +1,6 @@
+frontend-https://sameergram.vercel.app
+backend-https://sameergram.onrender.com
+
 # 📸 SameerGram
 
 **SameerGram** is a high-fidelity, premium social media platform designed for seamless food discovery and store interactions. Built with a modern dark aesthetic, glassmorphic UI elements, and a mobile-first philosophy.
