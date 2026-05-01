@@ -76,3 +76,17 @@ body {
   background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%) !important;
   backdrop-filter: blur(5px);
 }
+
+/* Premium Loader */
+.premium-loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: #bc1888;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

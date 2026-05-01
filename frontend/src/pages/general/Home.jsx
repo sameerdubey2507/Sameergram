@@ -6,24 +6,24 @@ import TopNav from '../../components/TopNav'
 
 const Home = () => {
     const [ videos, setVideos ] = useState([])
-    // Autoplay behavior is handled inside ReelFeed
-
+    const [ loading, setLoading ] = useState(true)
+    
     useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL;
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
         console.log(`Attempting to fetch videos from ${apiUrl}/api/food`);
+        setLoading(true);
         axios.get(`${apiUrl}/api/food`, { withCredentials: true })
             .then(response => {
-                console.log("Response received:", response.data);
                 if (response.data.foodItems) {
                     setVideos(response.data.foodItems);
-                } else {
-                    console.warn("No foodItems found in response data");
                 }
             })
             .catch(error => {
-                console.error("Axios fetch error:", error.message, error.config?.url);
-                alert(`Cannot connect to backend server at ${apiUrl}. Please ensure it is running.`);
+                console.error("Fetch error:", error);
             })
+            .finally(() => {
+                setLoading(false);
+            });
     }, [])
 
     // Using local refs within ReelFeed; keeping map here for dependency parity if needed
@@ -71,13 +71,19 @@ const Home = () => {
     return (
         <>
             <TopNav />
-            <ReelFeed
-                items={videos}
-                onLike={likeVideo}
-                onSave={saveVideo}
-                onComment={commentVideo}
-                emptyMessage="No videos available."
-            />
+            {loading ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: '#fff' }}>
+                    <div className="premium-loader"></div>
+                </div>
+            ) : (
+                <ReelFeed
+                    items={videos}
+                    onLike={likeVideo}
+                    onSave={saveVideo}
+                    onComment={commentVideo}
+                    emptyMessage="No videos available."
+                />
+            )}
         </>
     )
 }
