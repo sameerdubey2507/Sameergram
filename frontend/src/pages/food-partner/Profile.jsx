@@ -9,11 +9,13 @@ const Profile = () => {
     const [ videos, setVideos ] = useState([])
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true })
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+        axios.get(`${apiUrl}/api/food-partner/${id}`, { withCredentials: true })
             .then(response => {
                 setProfile(response.data.foodPartner)
                 setVideos(response.data.foodPartner.foodItems)
             })
+            .catch(error => console.error("Failed to fetch profile", error));
     }, [ id ])
 
 
