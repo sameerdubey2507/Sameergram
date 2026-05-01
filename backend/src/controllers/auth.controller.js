@@ -98,8 +98,8 @@ function logoutFoodPartner(req, res) {
 }
 
 async function googleLogin(req, res) {
-    const { token } = req.body;
-    console.log("Google Login attempt started...");
+    const { token, role } = req.body; // role can be 'user' or 'foodPartner'
+    console.log(`Google Login attempt started for role: ${role || 'user'}...`);
     try {
         console.log("Verifying token with Client ID:", process.env.GOOGLE_CLIENT_ID);
         const ticket = await client.verifyIdToken({
@@ -110,24 +110,40 @@ async function googleLogin(req, res) {
         const { email, name } = payload;
         console.log("Token verified for:", email);
 
-        let user = await userModel.findOne({ email });
+        let account;
+        const model = role === 'foodPartner' ? foodPartnerModel : userModel;
 
-        if (!user) {
-            console.log("New user detected, creating account...");
-            user = await userModel.create({
-                fullName: name,
+        account = await model.findOne({ email });
+
+        if (!account) {
+            console.log(`New ${role || 'user'} detected, creating account...`);
+            const accountData = {
                 email,
                 password: await bcrypt.hash(Math.random().toString(36), 10)
-            });
+            };
+            if (role === 'foodPartner') {
+                accountData.name = name;
+                accountData.contactName = name;
+            } else {
+                accountData.fullName = name;
+            }
+            account = await model.create(accountData);
         }
 
-        const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        const jwtToken = jwt.sign({ id: account._id }, process.env.JWT_SECRET);
         res.cookie("token", jwtToken);
         console.log("Login successful, cookie set.");
-        res.status(200).json({
+        
+        const responseData = {
             message: "Google login successful",
-            user: { _id: user._id, email: user.email, fullName: user.fullName }
-        });
+        };
+        if (role === 'foodPartner') {
+            responseData.foodPartner = { _id: account._id, email: account.email, name: account.name };
+        } else {
+            responseData.user = { _id: account._id, email: account.email, fullName: account.fullName };
+        }
+        
+        res.status(200).json(responseData);
     } catch (error) {
         console.error("DETAILED GOOGLE ERROR:", error.message);
         res.status(400).json({ message: "Google login failed", error: error.message });
