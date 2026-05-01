@@ -1,0 +1,112 @@
+.top-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  max-width: 440px;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+  padding: 16px 0;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.brand-logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: var(--grad-sameergram);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  font-family: 'Billabong', 'Grand Hotel', cursive, sans-serif; /* Instagram style font fallbacks */
+}
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all var(--transition-base);
+  backdrop-filter: blur(10px);
+}
+
+.nav-btn.primary {
+  background: #fff;
+  color: #000;
+}
+
+.nav-btn.primary:hover {
+  transform: scale(1.05);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.nav-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-btn span {
+  display: none; /* Icon only on small mobile, text on slightly wider */
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout-mini-btn {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.logout-mini-btn:hover {
+  transform: translateX(2px);
+  color: #fff;
+}
+
+@media (min-width: 360px) {
+  .nav-btn span { display: inline; }
+}

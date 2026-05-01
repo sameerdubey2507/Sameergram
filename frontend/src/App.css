@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.mobile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  width: 100vw;
+  background-color: #050505;
+}
+
+.mobile-container {
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  position: relative;
+  background-color: #000;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
+  overflow-y: auto; /* Allow scrolling inside the container */
+  overflow-x: hidden;
+}
+
+/* Constrain fixed elements to the mobile container */
+.top-nav,
+.bottom-nav {
+  position: absolute !important;
+  max-width: 440px;
+  width: 100%;
+  left: 0 !important;
+  right: 0 !important;
+}
