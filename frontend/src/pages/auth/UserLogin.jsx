@@ -18,12 +18,13 @@ const UserLogin = () => {
   };
 
   const handleGoogleLogin = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       window.google.accounts.id.initialize({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         callback: async (response) => {
           try {
-            const res = await axios.post("http://localhost:3000/api/auth/user/google-login", {
+            const res = await axios.post(`${apiUrl}/api/auth/user/google-login`, {
               token: response.credential
             }, { withCredentials: true });
             
@@ -43,10 +44,11 @@ const UserLogin = () => {
   };
 
   const handleSubmit = async (e) => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/user/login", formData, { withCredentials: true });
+      const response = await axios.post(`${apiUrl}/api/auth/user/login`, formData, { withCredentials: true });
 
       if (response.data.user) {
         await refreshUser();

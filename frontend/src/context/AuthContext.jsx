@@ -8,8 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchUser = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      const response = await axios.get('http://localhost:3000/api/auth/me', { withCredentials: true });
+      const response = await axios.get(`${apiUrl}/api/auth/me`, { withCredentials: true });
       setUser(response.data);
     } catch (error) {
       setUser(null);
@@ -23,10 +24,11 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
       // Logout both just in case, or detect role
       const endpoint = user?.role === 'foodPartner' ? '/api/auth/food-partner/logout' : '/api/auth/user/logout';
-      await axios.get(`http://localhost:3000${endpoint}`, { withCredentials: true });
+      await axios.get(`${apiUrl}${endpoint}`, { withCredentials: true });
       setUser(null);
       window.location.reload(); // Hard refresh to clear all states
     } catch (error) {
