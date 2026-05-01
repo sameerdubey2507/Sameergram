@@ -19,7 +19,12 @@ async function registerUser(req, res) {
         password: hashedPassword
     })
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    })
     res.status(201).json({
         message: "User registered successfully",
         user: { _id: user._id, email: user.email, fullName: user.fullName }
@@ -37,7 +42,12 @@ async function loginUser(req, res) {
         return res.status(400).json({ message: "Invalid email or password" })
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    })
     res.status(200).json({
         message: "User logged in successfully",
         user: { _id: user._id, email: user.email, fullName: user.fullName }
@@ -60,7 +70,12 @@ async function registerFoodPartner(req, res) {
         name, email, password: hashedPassword, phone, address, contactName
     })
     const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET)
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    })
     res.status(201).json({
         message: "Food partner registered successfully",
         foodPartner: {
@@ -85,7 +100,12 @@ async function loginFoodPartner(req, res) {
         return res.status(400).json({ message: "Invalid email or password" })
     }
     const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET)
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+    })
     res.status(200).json({
         message: "Food partner logged in successfully",
         foodPartner: { _id: foodPartner._id, email: foodPartner.email, name: foodPartner.name }
@@ -131,7 +151,12 @@ async function googleLogin(req, res) {
         }
 
         const jwtToken = jwt.sign({ id: account._id }, process.env.JWT_SECRET);
-        res.cookie("token", jwtToken);
+        res.cookie("token", jwtToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
         console.log("Login successful, cookie set.");
         
         const responseData = {
